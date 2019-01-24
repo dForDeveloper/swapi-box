@@ -25,9 +25,12 @@ class App extends Component {
   }
 
   setActiveCategory = async (categoryName) => {
-    const length = this.state[categoryName].length
-    const result = await fetchData(categoryName, length);
-    const newState = length === 0 ? await cleanData(categoryName, result) : {};
+    let newState = {};
+    const length = this.state[categoryName].length;
+    if (categoryName !== 'favorites' && length === 0) {
+      const result = await fetchData(categoryName, length);
+      newState = await cleanData(categoryName, result);
+    }
     this.setState({ ...newState, activeCategory: categoryName });
   }
 

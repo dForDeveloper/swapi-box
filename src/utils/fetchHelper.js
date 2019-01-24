@@ -15,16 +15,13 @@ const fetchAllPages = async (baseUrl, pageCount) => {
   }, []);
 }
 
-const fetchData = async (categoryName, length) => {
-  if (categoryName !== 'favorites' && length === 0) {
-    const url = `https://swapi.co/api/${categoryName}/`;
-    const response = await fetch(url);
-    const responseData = await response.json();
-    const pageCount = (Math.ceil(responseData.count / 10));
-    const allData = await fetchAllPages(url, pageCount);
-    return { [categoryName]: allData };
-  }
-  return {};
+const fetchData = async (categoryName) => {
+  const url = `https://swapi.co/api/${categoryName}/`;
+  const response = await fetch(url);
+  const responseData = await response.json();
+  const pageCount = (Math.ceil(responseData.count / 10));
+  const allData = await fetchAllPages(url, pageCount);
+  return { [categoryName]: allData };
 }
 
 const fetchHomeworld = async (url) => {
@@ -45,4 +42,17 @@ const fetchSpecies = async (urls) => {
   return { species: 'unknown' };
 }
 
-export { fetchData, fetchHomeworld, fetchSpecies };
+const fetchResidents = async (urls) => {
+  if (urls.length > 0) {
+    const residents = await Promise.all(
+      urls.map(async url => {
+        const response = await fetch(url);
+        return (await response.json()).name;
+      })
+    )
+    return { residents };
+  }
+  return { residents: ['unknown'] }
+}
+
+export { fetchData, fetchHomeworld, fetchSpecies, fetchResidents };

@@ -1,4 +1,4 @@
-import { fetchHomeworld, fetchSpecies } from './fetchHelper';
+import { fetchHomeworld, fetchSpecies, fetchResidents } from './fetchHelper';
 
 const cleanPeople = async ({ people }) => {
   const cleanedPeople = await Promise.all(
@@ -12,12 +12,14 @@ const cleanPeople = async ({ people }) => {
   return { people: cleanedPeople };
 }
 
-const cleanPlanets = ({ planets }) => {
-  return { planets };
-}
-
-const cleanVehicles = ({ vehicles }) => {
-  return { vehicles };
+const cleanPlanets = async ({ planets }) => {
+  const cleanedPlanets = await Promise.all(
+    planets.map(async planet => {
+      const { residents } = await fetchResidents(planet.residents);
+      return { ...planet, residents }
+    })
+  )
+  return { planets: cleanedPlanets };
 }
 
 const cleanData = async (categoryName, uncleanData) => {
@@ -27,7 +29,7 @@ const cleanData = async (categoryName, uncleanData) => {
     case 'planets':
       return await cleanPlanets(uncleanData);
     case 'vehicles':
-      return await cleanVehicles(uncleanData);
+      return uncleanData;
     default:
       break;
   }
