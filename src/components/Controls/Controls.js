@@ -15,11 +15,7 @@ const Controls = ({ favCount, activeCategory, setActiveCategory }) => {
       </button>
     );
   });
-  return(
-    <nav>
-      {buttons}
-    </nav>
-  );
+  return <nav>{buttons}</nav>;
 }
 
 export default Controls;

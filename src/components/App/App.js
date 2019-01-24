@@ -8,11 +8,11 @@ class App extends Component {
     super();
     this.state = {
       openingCrawl: '',
+      activeCategory: '',
       people: [],
       planets: [],
       vehicles: [],
-      favorites: [],
-      activeCategory: ''
+      favorites: []
     };
   }
 
@@ -28,7 +28,7 @@ class App extends Component {
     let newState = {};
     const length = this.state[categoryName].length;
     if (categoryName !== 'favorites' && length === 0) {
-      const result = await fetchData(categoryName, length);
+      const result = await fetchData(categoryName);
       newState = await cleanData(categoryName, result);
     }
     this.setState({ ...newState, activeCategory: categoryName });
