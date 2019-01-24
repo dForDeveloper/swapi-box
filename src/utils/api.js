@@ -12,7 +12,7 @@ export const fetchData = async (categoryName) => {
   return { [categoryName]: categoryData };
 }
 
-const fetchHomeworld = async (url) => {
+export const fetchHomeworld = async (url) => {
   const response = await fetch(url);
   const homeworld = await response.json();
   return ({
@@ -21,7 +21,7 @@ const fetchHomeworld = async (url) => {
   });
 }
 
-const fetchSpecies = async (urls) => {
+export const fetchSpecies = async (urls) => {
   if (urls.length > 0) {
     const response = await fetch(urls[0]);
     const species = await response.json();
@@ -30,7 +30,7 @@ const fetchSpecies = async (urls) => {
   return { species: 'unknown' };
 }
 
-const fetchResidents = async (urls) => {
+export const fetchResidents = async (urls) => {
   if (urls.length > 0) {
     const residents = await Promise.all(
       urls.map(async url => {
@@ -43,7 +43,7 @@ const fetchResidents = async (urls) => {
   return { residents: ['unknown'] }
 }
 
-const cleanPeople = async ({ people }) => {
+export const cleanPeople = async ({ people }) => {
   const cleanedPeople = await Promise.all(
     people.map(async person => {
       const { name } = person;
@@ -55,7 +55,7 @@ const cleanPeople = async ({ people }) => {
   return { people: cleanedPeople };
 }
 
-const cleanPlanets = async ({ planets }) => {
+export const cleanPlanets = async ({ planets }) => {
   const cleanedPlanets = await Promise.all(
     planets.map(async planet => {
       const { name, terrain, population, climate } = planet;
@@ -66,7 +66,7 @@ const cleanPlanets = async ({ planets }) => {
   return { planets: cleanedPlanets };
 }
 
-const cleanVehicles = ({ vehicles }) => {
+export const cleanVehicles = ({ vehicles }) => {
   const cleanedVehicles = vehicles.map(vehicle => {
     const { name, model, vehicle_class, passengers } = vehicle;
     return { name, model, vehicle_class, passengers };
