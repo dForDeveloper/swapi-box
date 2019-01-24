@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Controls from '../Controls/Controls';
-import fetchData from '../../utils/fetchHelper';
+import { fetchData } from '../../utils/fetchHelper';
+import cleanData from '../../utils/cleanHelper';
 
 class App extends Component {
   constructor() {
@@ -25,7 +26,8 @@ class App extends Component {
 
   setActiveCategory = async (categoryName) => {
     const length = this.state[categoryName].length
-    const newState = await fetchData(categoryName, length);
+    const result = await fetchData(categoryName, length);
+    const newState = length === 0 ? await cleanData(categoryName, result) : {};
     this.setState({ ...newState, activeCategory: categoryName });
   }
 

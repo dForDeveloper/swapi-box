@@ -27,4 +27,22 @@ const fetchData = async (categoryName, length) => {
   return {};
 }
 
-export default fetchData;
+const fetchHomeworld = async (url) => {
+  const response = await fetch(url);
+  const homeworld = await response.json();
+  return ({
+    homeworld: homeworld.name,
+    population: homeworld.population
+  });
+}
+
+const fetchSpecies = async (urls) => {
+  if (urls.length > 0) {
+    const response = await fetch(urls[0]);
+    const species = await response.json();
+    return { species: species.name };
+  }
+  return { species: 'unknown' };
+}
+
+export { fetchData, fetchHomeworld, fetchSpecies };
