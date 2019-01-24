@@ -7,13 +7,33 @@ import * as api from '../../utils/api';
 jest.mock('../../utils/api');
 
 describe('App', () => {
+  let wrapper;
+  beforeEach(() => {
+    wrapper = shallow(<App />);
+  })
+
   describe('componentDidMount', () => {
-    it('should setState with an opening crawl', async () => {
-      let wrapper = shallow(<App />);
+    it('should set state with an opening crawl', async () => {
       const expected = 'A long time ago in a galaxy far, far away...';
       api.fetchOpeningCrawl.mockResolvedValue(expected);
       await wrapper.instance().componentDidMount();
       expect(wrapper.state('openingCrawl')).toEqual(expected);
+    });
+  });
+
+  describe('setActiveCategory, without fetch', () => {
+    it('should set state with the category name passed in', () => {
+      wrapper.instance().setActiveCategory('favorites');
+      expect(wrapper.state('activeCategory')).toEqual('favorites');
+    });
+  });
+  
+  describe('setActiveCategory, with fetch', () => {
+    it('should set state of with an array', async () => {
+      const mockPeople = [{ name: 'Luke Skywalker' }];
+      api.cleanData.mockResolvedValue({ people: mockPeople });
+      await wrapper.instance().setActiveCategory('people');
+      expect(wrapper.state('people')).toEqual(mockPeople);
     });
   });
 });
