@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
+import Controls from '../Controls/Controls';
+import fetchSwitch from '../../utils/fetchHelper';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      openingCrawl: ''
+      openingCrawl: '',
+      people: [],
+      planets: [],
+      vehicles: [],
+      favorites: [],
+      activeCategory: ''
     };
   }
 
-  async componentDidMount() {
+  componentDidMount = async () => {
     const response = await fetch('https://swapi.co/api/films/');
     const films = await response.json();
     const randomNum = Math.floor(Math.random() * films.count);
@@ -16,10 +23,21 @@ class App extends Component {
     this.setState({ openingCrawl });
   }
 
+  setActiveCategory = async (categoryName) => {
+    const newState = await fetchSwitch(categoryName, this.state);
+    this.setState({ ...newState, activeCategory: categoryName });
+  }
+
   render() {
+    const { favorites, activeCategory, openingCrawl } = this.state;
     return (
       <div className="App">
-        <p>{this.state.openingCrawl}</p>
+        <Controls
+          favCount={favorites.length}
+          activeCategory={activeCategory}
+          setActiveCategory={this.setActiveCategory}
+        />
+        <p>{openingCrawl}</p>
       </div>
     );
   }
