@@ -1,38 +1,30 @@
-const fetchPeople = async () => {
-  const people = [];
-  const response = await fetch('https://swapi.co/api/people/?page=1');
-  const peopleData = await response.json();
-  people.push(...peopleData.results)
-  return { people };
-}
-
-const fetchPlanets = async () => {
-  const planets = [];
-  const response = await fetch('https://swapi.co/api/planets/?page=1');
-  const planetData = await response.json();
-  planets.push(...planetData.results);
-  return { planets };
-}
-
-const fetchVehicles = async () => {
-  const vehicles = [];
-  const response = await fetch('https://swapi.co/api/vehicles/?page=1');
-  const vehiclesData = await response.json();
-  vehicles.push(...vehiclesData.results);
-  return { vehicles };
-}
-
-const fetchSwitch = async (categoryName, { people, planets, vehicles }) => {
-  switch (categoryName) {
-    case 'people':
-      return people.length === 0 ? await fetchPeople() : {};
-    case 'planets':
-      return planets.length === 0 ? await fetchPlanets() : {};
-    case 'vehicles':
-      return vehicles.length === 0 ? await fetchVehicles() : {};
-    default:
-      return {};
+const fetchAllPages = async (baseUrl, pageCount) => {
+  const urls = [];
+  for (let i = 1; i <= pageCount; i++) {
+    urls.push(`${baseUrl}?page=${i}`);
   }
+  const responses = await Promise.all(
+    urls.map(async url => {
+      const response = await fetch(url);
+      return await response.json();
+    })
+  );
+  return responses.reduce((acc, response) => {
+    acc.push(...response.results);
+    return acc;
+  }, []);
 }
 
-export default fetchSwitch;
+const fetchData = async (categoryName, length) => {
+  if (categoryName !== 'favorites' && length === 0) {
+    const url = `https://swapi.co/api/${categoryName}/`;
+    const response = await fetch(url);
+    const responseData = await response.json();
+    const pageCount = (Math.ceil(responseData.count / 10));
+    const allData = await fetchAllPages(url, pageCount);
+    return { [categoryName]: allData };
+  }
+  return {};
+}
+
+export default fetchData;

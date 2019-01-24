@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Controls from '../Controls/Controls';
-import fetchSwitch from '../../utils/fetchHelper';
+import fetchData from '../../utils/fetchHelper';
 
 class App extends Component {
   constructor() {
@@ -24,7 +24,8 @@ class App extends Component {
   }
 
   setActiveCategory = async (categoryName) => {
-    const newState = await fetchSwitch(categoryName, this.state);
+    const length = this.state[categoryName].length
+    const newState = await fetchData(categoryName, length);
     this.setState({ ...newState, activeCategory: categoryName });
   }
 
