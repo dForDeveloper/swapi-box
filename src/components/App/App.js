@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import Controls from '../Controls/Controls';
-import { fetchData } from '../../utils/fetchHelper';
-import cleanData from '../../utils/cleanHelper';
+import { Controls } from '../Controls/Controls';
+import * as api from '../../utils/api';
 
 class App extends Component {
   constructor() {
@@ -17,10 +16,7 @@ class App extends Component {
   }
 
   componentDidMount = async () => {
-    const response = await fetch('https://swapi.co/api/films/');
-    const films = await response.json();
-    const randomNum = Math.floor(Math.random() * films.count);
-    const openingCrawl = films.results[randomNum].opening_crawl;
+    const openingCrawl = await api.fetchOpeningCrawl();
     this.setState({ openingCrawl });
   }
 
@@ -28,8 +24,8 @@ class App extends Component {
     let newState = {};
     const length = this.state[categoryName].length;
     if (categoryName !== 'favorites' && length === 0) {
-      const result = await fetchData(categoryName);
-      newState = await cleanData(categoryName, result);
+      const result = await api.fetchData(categoryName);
+      newState = await api.cleanData(categoryName, result);
     }
     this.setState({ ...newState, activeCategory: categoryName });
   }

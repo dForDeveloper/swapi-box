@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Controls should match the snapshot 1`] = `
+<nav>
+  <button
+    className=""
+    key="people"
+    onClick={[Function]}
+  >
+    people
+  </button>
+  <button
+    className=""
+    key="planets"
+    onClick={[Function]}
+  >
+    planets
+  </button>
+  <button
+    className=""
+    key="vehicles"
+    onClick={[Function]}
+  >
+    vehicles
+  </button>
+  <button
+    className=""
+    key="favorites"
+    onClick={[Function]}
+  >
+    favorites 0
+  </button>
+</nav>
+`;
