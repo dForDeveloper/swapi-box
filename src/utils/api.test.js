@@ -76,4 +76,28 @@ describe('api', () => {
       expect(result).toEqual(expected);
     });
   });
+
+  describe('fetchSpecies', () => {
+    beforeEach(() => {
+      const mockSpecies = { name: 'Human' };
+      window.fetch = jest.fn().mockImplementation(() => {
+        return Promise.resolve({
+          json: () => Promise.resolve(mockSpecies)
+        });
+      });
+    });
+
+    it('should call fetch with the correct parameter', () => {
+      const urls = ['https://www.website.com/'];
+      api.fetchSpecies(urls);
+      expect(window.fetch).toHaveBeenCalledWith(urls[0]);
+    });
+    
+    it('should return a promise that resolves to an object', async () => {
+      const urls = ['https://www.website.com/'];
+      const expected = { species: 'Human' };
+      const result = await api.fetchSpecies(urls);
+      expect(result).toEqual(expected);
+    });
+  });
 })
