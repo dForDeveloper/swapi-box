@@ -1,5 +1,4 @@
 import * as api from './api';
-import { shallow } from 'enzyme';
 
 describe('api', () => {
   describe('fetchOpeningCrawl', () => {
@@ -97,6 +96,50 @@ describe('api', () => {
       const urls = ['https://www.website.com/'];
       const expected = { species: 'Human' };
       const result = await api.fetchSpecies(urls);
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe('fetchResident, without fetch', () => {
+    it('should return an object when called with an empty array', async () => {
+      const expected = { residents: ['unknown'] };
+      const result = await api.fetchResidents([]);
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe('fetchResidents, with fetch', () => {
+    beforeEach(() => {
+      const mockResidents = { name: 'Luke Skywalker' };
+      window.fetch = jest.fn().mockImplementation(() => {
+        return Promise.resolve({
+          json: () => Promise.resolve(mockResidents)
+        });
+      });
+    });
+
+    it('should call fetch with the correct parameters', () => {
+      const urls = [
+        'https://www.website.com/0',
+        'https://www.website.com/1',
+        'https://www.website.com/2',
+      ];
+      api.fetchResidents(urls);
+      expect(window.fetch).toHaveBeenCalledWith(urls[0]);
+      expect(window.fetch).toHaveBeenCalledWith(urls[1]);
+      expect(window.fetch).toHaveBeenCalledWith(urls[2]);
+    });
+    
+    it('should return a promise that resolves to an object', async () => {
+      const urls = [
+        'https://www.website.com/0',
+        'https://www.website.com/1',
+        'https://www.website.com/2',
+      ];
+      const expected = {
+        residents: ['Luke Skywalker', 'Luke Skywalker', 'Luke Skywalker']
+      }
+      const result = await api.fetchResidents(urls);
       expect(result).toEqual(expected);
     });
   });
