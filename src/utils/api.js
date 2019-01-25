@@ -1,3 +1,5 @@
+import * as clean from './dataCleaner';
+
 export const fetchOpeningCrawl = async () => {
   const response = await fetch('https://swapi.co/api/films/');
   const films = await response.json();
@@ -41,4 +43,17 @@ export const fetchResidents = async (urls) => {
     return { residents };
   }
   return { residents: ['unknown'] }
+}
+
+export const cleanData = async (categoryName, uncleanData) => {
+  switch (categoryName) {
+    case 'people':
+      return clean.cleanPeople(uncleanData);
+    case 'planets':
+      return clean.cleanPlanets(uncleanData);
+    case 'vehicles':
+      return clean.cleanVehicles(uncleanData);
+    default:
+      break;
+  }
 }

@@ -1,4 +1,5 @@
 import * as api from './api';
+import * as clean from './dataCleaner';
 
 describe('api', () => {
   describe('fetchOpeningCrawl', () => {
@@ -138,6 +139,26 @@ describe('api', () => {
       }
       const result = await api.fetchResidents(mockUrls);
       expect(result).toEqual(expected);
+    });
+  });
+
+  describe('cleanData', () => {
+    it('should call cleanPeople if people is passed in', () => {
+      clean.cleanPeople = jest.fn();
+      api.cleanData('people', 'mockData');
+      expect(clean.cleanPeople).toHaveBeenCalled();
+    });
+    
+    it('should call cleanPlanets if planets is passed in', () => {
+      clean.cleanPlanets = jest.fn();
+      api.cleanData('planets', 'mockData');
+      expect(clean.cleanPlanets).toHaveBeenCalled();
+    });
+    
+    it('should call cleanVehicles if vehicles is passed in', () => {
+      clean.cleanVehicles = jest.fn();
+      api.cleanData('vehicles', 'mockData');
+      expect(clean.cleanVehicles).toHaveBeenCalled();
     });
   });
 });

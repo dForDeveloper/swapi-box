@@ -2,7 +2,6 @@ import React from 'react';
 import App from './App';
 import { shallow } from 'enzyme';
 import * as api from '../../utils/api';
-import * as clean from '../../utils/dataCleaner';
 
 describe('App', () => {
   let wrapper;
@@ -29,7 +28,7 @@ describe('App', () => {
     
     it('should set state with an array if nothing is in state', async () => {
       const mockPeople = [{ name: 'Luke Skywalker' }];
-      clean.cleanData = jest.fn(() => {
+      api.cleanData = jest.fn(() => {
         return { people: mockPeople };
       });
       await wrapper.instance().setActiveCategory('people');

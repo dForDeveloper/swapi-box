@@ -145,4 +145,4 @@ describe('dataCleaner', () => {
       expect(result).toEqual(expected);
     });
   });
-})
+});

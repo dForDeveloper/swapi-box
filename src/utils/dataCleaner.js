@@ -30,16 +30,3 @@ export const cleanVehicles = ({ vehicles }) => {
   });
   return { vehicles: cleanedVehicles };
 }
-
-export const cleanData = async (categoryName, uncleanData) => {
-  switch (categoryName) {
-    case 'people':
-      return cleanPeople(uncleanData);
-    case 'planets':
-      return cleanPlanets(uncleanData);
-    case 'vehicles':
-      return cleanVehicles(uncleanData);
-    default:
-      break;
-  }
-}
