@@ -1,54 +1,64 @@
 import * as clean from './dataCleaner';
 import * as api from './api';
 
-describe('cleanPeople', () => {
-  const mockPeople = {
-      people: [
-      { name: 'Luke Skywalker', homeworld: 'Planet 1' , species: 'Species 1' },
-      { name: 'Han Solo', homeworld: 'Planet 2' , species: 'Species 2' }
-    ]
-  };
-  api.fetchHomeworld = jest.fn(() => {
-    return ({
-      homeworld: 'some planet',
-      population: 'a lot'
-    });
-  });
-  api.fetchSpecies = jest.fn(() => {
-    return { species: 'Human' };
-  });
-  
-  it('should call fetchHomeworld with the correct parameter', () => {
-    clean.cleanPeople(mockPeople);
-    expect(api.fetchHomeworld).toHaveBeenCalledWith('Planet 1');
-    expect(api.fetchHomeworld).toHaveBeenCalledWith('Planet 2');
-  });
-  
-  it('should call fetchSpecies with the correct parameter', () => {
-    clean.cleanPeople(mockPeople);
-    expect(api.fetchSpecies).toHaveBeenCalledWith('Species 1');
-    expect(api.fetchSpecies).toHaveBeenCalledWith('Species 2');
-  });
-  
-  it('should return an object', async () => {
-    const expected = {
-      people: [
+describe('dataCleaner', () => {
+  describe('cleanPeople', () => {
+    const mockPeople = {
+        people: [
         {
           name: 'Luke Skywalker',
-          species: 'Human',
-          homeworld: 'some planet',
-          population: 'a lot'
+          homeworld: 'Planet 1',
+          species: 'Species 1'
         },
         {
           name: 'Han Solo',
-          species: 'Human',
-          homeworld: 'some planet',
-          population: 'a lot'
+          homeworld: 'Planet 2',
+          species: 'Species 2'
         }
       ]
     };
-    const result = await clean.cleanPeople(mockPeople);
-    expect(result).toEqual(expected);
+    api.fetchHomeworld = jest.fn(() => {
+      return ({
+        homeworld: 'some planet',
+        population: 'a lot'
+      });
+    });
+    api.fetchSpecies = jest.fn(() => {
+      return { species: 'Human' };
+    });
+    
+    it('should call fetchHomeworld with the correct parameter', () => {
+      clean.cleanPeople(mockPeople);
+      expect(api.fetchHomeworld).toHaveBeenCalledWith('Planet 1');
+      expect(api.fetchHomeworld).toHaveBeenCalledWith('Planet 2');
+    });
+    
+    it('should call fetchSpecies with the correct parameter', () => {
+      clean.cleanPeople(mockPeople);
+      expect(api.fetchSpecies).toHaveBeenCalledWith('Species 1');
+      expect(api.fetchSpecies).toHaveBeenCalledWith('Species 2');
+    });
+    
+    it('should return an object with the correct structure', async () => {
+      const expected = {
+        people: [
+          {
+            name: 'Luke Skywalker',
+            species: 'Human',
+            homeworld: 'some planet',
+            population: 'a lot'
+          },
+          {
+            name: 'Han Solo',
+            species: 'Human',
+            homeworld: 'some planet',
+            population: 'a lot'
+          }
+        ]
+      };
+      const result = await clean.cleanPeople(mockPeople);
+      expect(result).toEqual(expected);
+    });
   });
 
   describe('cleanPlanets', () => {
@@ -84,7 +94,7 @@ describe('cleanPeople', () => {
       );
     });
 
-    it('should return an object', async () => {
+    it('should return an object with the correct structure', async () => {
       const expected = {
         planets: [
           {
@@ -107,4 +117,32 @@ describe('cleanPeople', () => {
       expect(result).toEqual(expected);
     });
   });
-});
+
+  describe('cleanVehicles', () => {
+    it('should return an object with the correct structure', () => {
+      const mockVehicles = {
+        vehicles: [
+          {
+            name: 'AT-AT', 
+            model: 'All Terrain Armored Transport', 
+            passengers: '40', 
+            vehicle_class: 'assault walker',
+            extraKey: 'extra value'
+          }
+        ]
+      };
+      const expected = {
+        vehicles: [
+          {
+            name: 'AT-AT', 
+            model: 'All Terrain Armored Transport', 
+            passengers: '40', 
+            vehicle_class: 'assault walker',
+          }
+        ]
+      };
+      const result = clean.cleanVehicles(mockVehicles);
+      expect(result).toEqual(expected);
+    });
+  });
+})
