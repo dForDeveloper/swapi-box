@@ -17,16 +17,14 @@ describe('cleanPeople', () => {
   api.fetchSpecies = jest.fn(() => {
     return { species: 'Human' };
   });
-  beforeEach(() => {
-  });
   
-  it('should call fetchHomeworld with the correct parameters', () => {
+  it('should call fetchHomeworld with the correct parameter', () => {
     clean.cleanPeople(mockPeople);
     expect(api.fetchHomeworld).toHaveBeenCalledWith('Planet 1');
     expect(api.fetchHomeworld).toHaveBeenCalledWith('Planet 2');
   });
   
-  it('should call fetchSpecies with the correct parameters', () => {
+  it('should call fetchSpecies with the correct parameter', () => {
     clean.cleanPeople(mockPeople);
     expect(api.fetchSpecies).toHaveBeenCalledWith('Species 1');
     expect(api.fetchSpecies).toHaveBeenCalledWith('Species 2');
@@ -51,5 +49,62 @@ describe('cleanPeople', () => {
     };
     const result = await clean.cleanPeople(mockPeople);
     expect(result).toEqual(expected);
+  });
+
+  describe('cleanPlanets', () => {
+    const mockPlanets = {
+      planets: [
+        {
+          name: 'Tatooine',
+          terrain: 'desert',
+          climate: 'arid',
+          population: '200000',
+          residents: ['Resident 1', 'Resident 2']
+        },
+        {
+          name: 'Alderaan',
+          terrain: 'grasslands, mountains',
+          climate: 'temperate',
+          population: '2000000000',
+          residents: ['Resident 3', 'Resident 4']
+        }
+      ]
+    };
+    api.fetchResidents = jest.fn(() => {
+      return { residents: ['some person', 'some other person'] };
+    });
+
+    it('should call fetchResidents with the correct parameter', () => {
+      clean.cleanPlanets(mockPlanets);
+      expect(api.fetchResidents).toHaveBeenCalledWith(
+        ['Resident 1', 'Resident 2']
+      );
+      expect(api.fetchResidents).toHaveBeenCalledWith(
+        ['Resident 3', 'Resident 4']
+      );
+    });
+
+    it('should return an object', async () => {
+      const expected = {
+        planets: [
+          {
+            name: 'Tatooine',
+            terrain: 'desert',
+            climate: 'arid',
+            population: '200000',
+            residents: ['some person', 'some other person']
+          },
+          {
+            name: 'Alderaan',
+            terrain: 'grasslands, mountains',
+            climate: 'temperate',
+            population: '2000000000',
+            residents: ['some person', 'some other person']
+          }
+        ]
+      };
+      const result = await clean.cleanPlanets(mockPlanets);
+      expect(result).toEqual(expected);
+    });
   });
 });
