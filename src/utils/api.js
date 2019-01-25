@@ -2,32 +2,48 @@ import * as clean from './dataCleaner';
 
 export const fetchOpeningCrawl = async () => {
   const response = await fetch('https://swapi.co/api/films/');
-  const films = await response.json();
-  const randomNum = Math.floor(Math.random() * films.count);
-  return films.results[randomNum].opening_crawl;
+  if (response.ok) {
+    const films = await response.json();
+    const randomNum = Math.floor(Math.random() * films.count);
+    return films.results[randomNum].opening_crawl;
+  } else {
+    throw Error(`${response.status}`);
+  }
 }
 
 export const fetchData = async (categoryName) => {
   const url = `https://swapi.co/api/${categoryName}/`;
   const response = await fetch(url);
-  const categoryData = (await response.json()).results;
-  return { [categoryName]: categoryData };
+  if (response.ok) {
+    const categoryData = (await response.json()).results;
+    return { [categoryName]: categoryData };
+  } else {
+    throw Error(`${response.status}`);
+  }
 }
 
 export const fetchHomeworld = async (url) => {
   const response = await fetch(url);
-  const homeworld = await response.json();
-  return ({
-    homeworld: homeworld.name,
-    population: homeworld.population
-  });
+  if (response.ok) {
+    const homeworld = await response.json();
+    return ({
+      homeworld: homeworld.name,
+      population: homeworld.population
+    });
+  } else {
+    throw Error(`${response.status}`);
+  }
 }
 
 export const fetchSpecies = async (urls) => {
   if (urls.length > 0) {
     const response = await fetch(urls[0]);
-    const species = await response.json();
-    return { species: species.name };
+    if (response.ok) {
+      const species = await response.json();
+      return { species: species.name };
+    } else {
+      throw Error(`${response.status}`);
+    }
   }
   return { species: 'unknown' };
 }
@@ -37,7 +53,11 @@ export const fetchResidents = async (urls) => {
     const residents = await Promise.all(
       urls.map(async url => {
         const response = await fetch(url);
-        return (await response.json()).name;
+        if (response.ok) {
+          return (await response.json()).name;
+        } else {
+          throw Error(`${response.status}`);
+        }
       })
     );
     return { residents };

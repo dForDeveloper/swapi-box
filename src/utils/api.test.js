@@ -12,7 +12,8 @@ describe('api', () => {
       };
       window.fetch = jest.fn(() => {
         return Promise.resolve({
-          json: () => Promise.resolve(mockData)
+          json: () => Promise.resolve(mockData),
+          ok: true
         });
       });
     });
@@ -28,6 +29,17 @@ describe('api', () => {
       const result = await api.fetchOpeningCrawl();
       expect(result).toEqual(expected);
     });
+
+    it('should throw an error if response is not ok', () => {
+      const expected = Error('401');
+      window.fetch = jest.fn(() => {
+        return Promise.resolve({
+          ok: false,
+          status: 401
+        });
+      });
+      expect(api.fetchOpeningCrawl()).rejects.toEqual(expected);
+    });
   });
 
   describe('fetchData', () => {
@@ -35,7 +47,8 @@ describe('api', () => {
       const mockData = { results: ['data'] };
       window.fetch = jest.fn(() => {
         return Promise.resolve({
-          json: () => Promise.resolve(mockData)
+          json: () => Promise.resolve(mockData),
+          ok: true
         });
       });
     });
@@ -51,6 +64,17 @@ describe('api', () => {
       const result = await api.fetchData('people');
       expect(result).toEqual(expected);
     });
+
+    it('should throw an error if response is not ok', () => {
+      window.fetch = jest.fn(() => {
+        return Promise.resolve({
+          ok: false,
+          status: 404
+        });
+      });
+      const expected = Error('404');
+      expect(api.fetchData('asdf')).rejects.toEqual(expected);
+    });
   });
 
   describe('fetchHomeworld', () => {
@@ -59,7 +83,8 @@ describe('api', () => {
       const mockHomeworld = { name: 'Tatooine', population: '200000' };
       window.fetch = jest.fn(() => {
         return Promise.resolve({
-          json: () => Promise.resolve(mockHomeworld)
+          json: () => Promise.resolve(mockHomeworld),
+          ok: true
         });
       });
     });
@@ -74,6 +99,17 @@ describe('api', () => {
       const result = await api.fetchHomeworld(mockUrl);
       expect(result).toEqual(expected);
     });
+
+    it('should throw an error if response is not ok', () => {
+      window.fetch = jest.fn(() => {
+        return Promise.resolve({
+          ok: false,
+          status: 403
+        });
+      });
+      const expected = Error('403');
+      expect(api.fetchHomeworld('forbidden')).rejects.toEqual(expected);
+    });
   });
 
   describe('fetchSpecies', () => {
@@ -82,7 +118,8 @@ describe('api', () => {
       const mockSpecies = { name: 'Human' };
       window.fetch = jest.fn(() => {
         return Promise.resolve({
-          json: () => Promise.resolve(mockSpecies)
+          json: () => Promise.resolve(mockSpecies),
+          ok: true
         });
       });
     });
@@ -103,6 +140,17 @@ describe('api', () => {
       const result = await api.fetchSpecies(mockUrls);
       expect(result).toEqual(expected);
     });
+
+    it('should throw an error if response is not ok', () => {
+      window.fetch = jest.fn(() => {
+        return Promise.resolve({
+          ok: false,
+          status: 408
+        });
+      });
+      const expected = Error('408');
+      expect(api.fetchSpecies(['1', '2'])).rejects.toEqual(expected);
+    });
   });
 
   describe('fetchResidents', () => {
@@ -115,7 +163,8 @@ describe('api', () => {
       const mockResidents = { name: 'Luke Skywalker' };
       window.fetch = jest.fn(() => {
         return Promise.resolve({
-          json: () => Promise.resolve(mockResidents)
+          json: () => Promise.resolve(mockResidents),
+          ok: true
         });
       });
     });
@@ -139,6 +188,17 @@ describe('api', () => {
       }
       const result = await api.fetchResidents(mockUrls);
       expect(result).toEqual(expected);
+    });
+
+    it('should throw an error if response is not ok', () => {
+      window.fetch = jest.fn(() => {
+        return Promise.resolve({
+          ok: false,
+          status: 429
+        });
+      });
+      const expected = Error('429');
+      expect(api.fetchResidents(['some url'])).rejects.toEqual(expected);
     });
   });
 
