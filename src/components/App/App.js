@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Controls } from '../Controls/Controls';
 import * as api from '../../utils/api';
+import * as clean from '../../utils/dataCleaner';
 
 class App extends Component {
   constructor() {
@@ -25,7 +26,7 @@ class App extends Component {
     const length = this.state[categoryName].length;
     if (categoryName !== 'favorites' && length === 0) {
       const result = await api.fetchData(categoryName);
-      newState = await api.cleanData(categoryName, result);
+      newState = await clean.cleanData(categoryName, result);
     }
     this.setState({ ...newState, activeCategory: categoryName });
   }
