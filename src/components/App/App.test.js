@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import App from './App';
 import { shallow } from 'enzyme';
 import * as api from '../../utils/api';
@@ -22,15 +21,13 @@ describe('App', () => {
     });
   });
 
-  describe('setActiveCategory, without fetch', () => {
+  describe('setActiveCategory', () => {
     it('should set state with the category name passed in', () => {
       wrapper.instance().setActiveCategory('favorites');
       expect(wrapper.state('activeCategory')).toEqual('favorites');
     });
-  });
-  
-  describe('setActiveCategory, with fetch', () => {
-    it('should set state of with an array', async () => {
+    
+    it('should set state with an array if nothing is in state', async () => {
       const mockPeople = [{ name: 'Luke Skywalker' }];
       clean.cleanData = jest.fn(() => {
         return { people: mockPeople };

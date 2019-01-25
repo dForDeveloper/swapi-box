@@ -45,7 +45,7 @@ describe('api', () => {
       expect(window.fetch).toHaveBeenCalledWith(expected);
     });
     
-    it('should return a promise that resolves to an object', async () => {
+    it('should return an object with the correct structure', async () => {
       const expected = { people: ['data'] };
       const result = await api.fetchData('people');
       expect(result).toEqual(expected);
@@ -68,17 +68,9 @@ describe('api', () => {
       expect(window.fetch).toHaveBeenCalledWith(mockUrl);
     });
     
-    it('should return a promise that resolves to an object', async () => {
+    it('should return an object with the correct structure', async () => {
       const expected = { homeworld: 'Tatooine', population: '200000' };
       const result = await api.fetchHomeworld(mockUrl);
-      expect(result).toEqual(expected);
-    });
-  });
-
-  describe('fetchResident, without fetch', () => {
-    it('should return an object when called with an empty array', async () => {
-      const expected = { residents: ['unknown'] };
-      const result = await api.fetchResidents([]);
       expect(result).toEqual(expected);
     });
   });
