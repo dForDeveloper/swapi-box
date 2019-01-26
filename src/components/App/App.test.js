@@ -7,6 +7,22 @@ import * as helper from '../../utils/apiHelper';
 
 describe('App', () => {
   let wrapper;
+  const mockPerson1 = {
+    name: 'Luke Skywalker',
+    Species: 'Human',
+    Homeworld: 'some planet',
+    'Population of some planet': '5 thousand',
+    favorite: false,
+    category: 'people'
+  };
+  const mockPerson2 = {
+    name: 'Han Solo',
+    Species: 'Human',
+    Homeworld: 'some planet',
+    'Population of some planet': '5 thousand',
+    favorite: false,
+    category: 'people'
+  };
   beforeEach(() => {
     wrapper = shallow(<App />);
   });
@@ -71,6 +87,45 @@ describe('App', () => {
       clean.cleanVehicles = jest.fn();
       wrapper.instance().cleanData('vehicles', 'mockData');
       expect(clean.cleanVehicles).toHaveBeenCalled();
+    });
+  });
+
+  describe('getCards', () => {
+    it('should return an array of JSX', () => {
+      wrapper.setState({ people: [mockPerson1, mockPerson2] });
+      const result = wrapper.instance().getCards('people');
+      expect(result.length).toEqual(2);
+    })
+  });
+
+  describe('toggleFavorite', () => {
+    it('should toggle the favorite property of a card and setState', () => {
+      const expectedPerson = { ...mockPerson2, favorite: true };
+      wrapper.setState({ people: [mockPerson1, mockPerson2] });
+      wrapper.instance().toggleFavorite(mockPerson2);
+      expect(wrapper.state('people')).toEqual([mockPerson1, expectedPerson]);
+    });
+
+    it('should call updateFavorites with the correct parameter', async () => {
+      wrapper.instance().updateFavorites = jest.fn();
+      const expected = { ...mockPerson1, favorite: true };
+      await wrapper.instance().toggleFavorite(mockPerson1);
+      expect(wrapper.instance().updateFavorites).toHaveBeenCalledWith(expected)
+    });
+  });
+
+  describe('updateFavorites', () => {
+    it('should add a card to favorites if its favorited', () => {
+      const mockFavorite = { ...mockPerson1, favorite: true}
+      wrapper.instance().updateFavorites(mockFavorite);
+      expect(wrapper.state('favorites')).toEqual([mockFavorite]);
+    });
+
+    it('should remove a card from favorites if its not favorited', () => {
+      const mockFavorite = { ...mockPerson1, favorite: true}
+      wrapper.instance().updateFavorites(mockFavorite);
+      wrapper.instance().updateFavorites(mockPerson1);
+      expect(wrapper.state('favorites').length).toEqual(0);
     });
   });
 });

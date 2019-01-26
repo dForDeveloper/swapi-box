@@ -44,13 +44,17 @@ describe('dataCleaner', () => {
             name: 'Luke Skywalker',
             Species: 'Human',
             Homeworld: 'some planet',
-            'Population of some planet': '5 thousand'
+            'Population of some planet': '5 thousand',
+            favorite: false,
+            category: 'people'
           },
           {
             name: 'Han Solo',
             Species: 'Human',
             Homeworld: 'some planet',
-            'Population of some planet': '5 thousand'
+            'Population of some planet': '5 thousand',
+            favorite: false,
+            category: 'people'
           }
         ]
       };
@@ -98,14 +102,18 @@ describe('dataCleaner', () => {
             Terrain: 'desert',
             Climate: 'arid',
             Population: '200 thousand',
-            Residents: 'some person and some other person'
+            Residents: 'some person and some other person',
+            favorite: false,
+            category: 'planets'
           },
           {
             name: 'Alderaan',
             Terrain: 'grasslands, mountains',
             Climate: 'temperate',
             Population: '2 billion',
-            Residents: 'some person and some other person'
+            Residents: 'some person and some other person',
+            favorite: false,
+            category: 'planets'
           }
         ]
       };
@@ -131,7 +139,9 @@ describe('dataCleaner', () => {
             name: 'AT-AT', 
             Model: 'All Terrain Armored Transport', 
             'Passenger Capacity': '40', 
-            Class: 'assault walker'
+            Class: 'assault walker',
+            favorite: false,
+            category: 'vehicles'
           }
         ]
       };

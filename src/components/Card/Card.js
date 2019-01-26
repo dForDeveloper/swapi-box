@@ -1,16 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const Card = ({ info }) => {
-  const statLines = Object.keys(info).map(stat => {
-    if (stat === 'name') {
-      return <h3 key={stat}>{info.name}</h3>
-    }
-    return <p key={stat}>{stat}: {info[stat]}</p>
+export const Card = ({ card, toggleFavorite }) => {
+  const { favorite } = card;
+  const displayedStats = Object.keys(card).filter(stat => {
+    return stat !== 'category' && stat !== 'favorite';
+  }); 
+  const statLines = displayedStats.map(stat => {
+    return stat === 'name' ?
+      <h3 key={stat}>{card.name}</h3> :
+      <p key={stat}>{stat}: {card[stat]}</p>
   });
-  return <div>{statLines}</div>
+  return (
+    <div>
+      {statLines}
+      <button onClick={() => toggleFavorite(card)}>
+        {favorite ? 'Remove from Favorites' : 'Add to Favorites'}
+      </button>
+    </div>
+  )
 }
 
 Card.propTypes = {
-  info: PropTypes.object
+  card: PropTypes.object,
+  toggleFavorite: PropTypes.func
 }

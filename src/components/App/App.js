@@ -56,8 +56,38 @@ class App extends Component {
 
   getCards = (categoryName) => {
     return this.state[categoryName].map(cardInfo => {
-      return <Card key={cardInfo.name} info={cardInfo} />
+      return (
+        <Card
+          key={cardInfo.name}
+          card={cardInfo}
+          toggleFavorite={this.toggleFavorite}
+        />
+      );
     });
+  }
+
+  toggleFavorite = async (card) => {
+    const { name, category, favorite } = card;
+    const newArray = this.state[category].map(categoryItem => {
+      if (categoryItem.name === name) {
+        categoryItem.favorite = !favorite;
+      }
+      return categoryItem;
+    });
+    await this.setState({ [category]: newArray });
+    this.updateFavorites({ ...card, favorite: !favorite });
+  }
+
+  updateFavorites = (card) => {
+    const { favorites } = this.state;
+    if (card.favorite) {
+      this.setState({ favorites: [...favorites, card] });
+    } else {
+      const newFavorites = favorites.filter((favoritedCard) => {
+        return favoritedCard.name !== card.name;
+      });
+      this.setState({ favorites: newFavorites });
+    }
   }
 
   render() {

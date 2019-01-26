@@ -28,6 +28,8 @@ export const cleanPeople = async (people) => {
       const populationAbbrev = getPopulationAbbreviation(population);
       return {
         name,
+        favorite: false,
+        category: 'people',
         Homeworld: homeworld,
         [populationKey]: populationAbbrev,
         Species: species
@@ -55,6 +57,8 @@ export const cleanPlanets = async (planets) => {
       }, residents[0]);
       return ({
         name,
+        favorite: false,
+        category: 'planets',
         Terrain: terrain,
         Population: populationAbbrev,
         Climate: climate,
@@ -70,6 +74,8 @@ export const cleanVehicles = (vehicles) => {
     const { name, model, vehicle_class, passengers } = vehicle;
     return {
       name,
+      favorite: false,
+      category: 'vehicles',
       Model: model,
       Class: vehicle_class,
       'Passenger Capacity': passengers
