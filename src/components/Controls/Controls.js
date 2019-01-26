@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 
 export const Controls = ({ favCount, activeCategory, setActiveCategory }) => {
   const buttonNames = ['people', 'planets', 'vehicles', 'favorites'];
@@ -16,4 +17,10 @@ export const Controls = ({ favCount, activeCategory, setActiveCategory }) => {
     );
   });
   return <nav>{buttons}</nav>;
+}
+
+Controls.propTypes = {
+  favCount: PropTypes.number,
+  activeCategory: PropTypes.string,
+  setActiveCategory: PropTypes.func
 }
