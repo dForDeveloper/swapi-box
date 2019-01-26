@@ -1,50 +1,10 @@
-import * as api from './api';
-import * as clean from './dataCleaner';
+import { fetchData } from './api';
 
 describe('api', () => {
-  describe('fetchOpeningCrawl', () => {
-    beforeEach(() => {
-      const mockData = {
-        count: 1,
-        results: [{
-          opening_crawl: 'A long time ago in a galaxy far, far away...'
-        }]
-      };
-      window.fetch = jest.fn(() => {
-        return Promise.resolve({
-          json: () => Promise.resolve(mockData),
-          ok: true
-        });
-      });
-    });
-
-    it('should call fetch with the correct parameter', async () => {
-      const expected = 'https://swapi.co/api/films/';
-      await api.fetchOpeningCrawl();
-      expect(window.fetch).toHaveBeenCalledWith(expected);
-    });
-
-    it('should return a Promise that resolves to a string', async () => {
-      const expected = 'A long time ago in a galaxy far, far away...';
-      const result = await api.fetchOpeningCrawl();
-      expect(result).toEqual(expected);
-    });
-
-    it('should throw an error if response is not ok', () => {
-      const expected = Error('401');
-      window.fetch = jest.fn(() => {
-        return Promise.resolve({
-          ok: false,
-          status: 401
-        });
-      });
-      expect(api.fetchOpeningCrawl()).rejects.toEqual(expected);
-    });
-  });
-
   describe('fetchData', () => {
+    const mockUrl = 'https://www.website.com/';
+    const mockData = { results: ['data'] };
     beforeEach(() => {
-      const mockData = { results: ['data'] };
       window.fetch = jest.fn(() => {
         return Promise.resolve({
           json: () => Promise.resolve(mockData),
@@ -54,171 +14,25 @@ describe('api', () => {
     });
 
     it('should call fetch with the correct parameter', () => {
-      const expected = 'https://swapi.co/api/people/'
-      api.fetchData('people');
-      expect(window.fetch).toHaveBeenCalledWith(expected);
+      fetchData(mockUrl);
+      expect(window.fetch).toHaveBeenCalledWith(mockUrl);
     });
     
     it('should return an object with the correct structure', async () => {
-      const expected = { people: ['data'] };
-      const result = await api.fetchData('people');
-      expect(result).toEqual(expected);
+      const result = await fetchData(mockUrl);
+      expect(result).toEqual(mockData);
     });
 
     it('should throw an error if response is not ok', () => {
+      const mockUrl = 'https://swapi.co/api/'
       window.fetch = jest.fn(() => {
         return Promise.resolve({
           ok: false,
           status: 404
         });
       });
-      const expected = Error('404');
-      expect(api.fetchData('asdf')).rejects.toEqual(expected);
-    });
-  });
-
-  describe('fetchHomeworld', () => {
-    const mockUrl = 'https://www.website.com/';
-    beforeEach(() => {
-      const mockHomeworld = { name: 'Tatooine', population: '200000' };
-      window.fetch = jest.fn(() => {
-        return Promise.resolve({
-          json: () => Promise.resolve(mockHomeworld),
-          ok: true
-        });
-      });
-    });
-
-    it('should call fetch with the correct parameter', () => {
-      api.fetchHomeworld(mockUrl);
-      expect(window.fetch).toHaveBeenCalledWith(mockUrl);
-    });
-    
-    it('should return an object with the correct structure', async () => {
-      const expected = { homeworld: 'Tatooine', population: '200000' };
-      const result = await api.fetchHomeworld(mockUrl);
-      expect(result).toEqual(expected);
-    });
-
-    it('should throw an error if response is not ok', () => {
-      window.fetch = jest.fn(() => {
-        return Promise.resolve({
-          ok: false,
-          status: 403
-        });
-      });
-      const expected = Error('403');
-      expect(api.fetchHomeworld('forbidden')).rejects.toEqual(expected);
-    });
-  });
-
-  describe('fetchSpecies', () => {
-    const mockUrls = ['https://www.website.com/'];
-    beforeEach(() => {
-      const mockSpecies = { name: 'Human' };
-      window.fetch = jest.fn(() => {
-        return Promise.resolve({
-          json: () => Promise.resolve(mockSpecies),
-          ok: true
-        });
-      });
-    });
-
-    it('should call fetch with the correct parameter', () => {
-      api.fetchSpecies(mockUrls);
-      expect(window.fetch).toHaveBeenCalledWith(mockUrls[0]);
-    });
-
-    it('should return an object when called with an empty array', async () => {
-      const expected = { species: 'unknown' };
-      const result = await api.fetchSpecies([]);
-      expect(result).toEqual(expected);
-    });
-    
-    it('should return an object when called with a filled array', async () => {
-      const expected = { species: 'Human' };
-      const result = await api.fetchSpecies(mockUrls);
-      expect(result).toEqual(expected);
-    });
-
-    it('should throw an error if response is not ok', () => {
-      window.fetch = jest.fn(() => {
-        return Promise.resolve({
-          ok: false,
-          status: 408
-        });
-      });
-      const expected = Error('408');
-      expect(api.fetchSpecies(['1', '2'])).rejects.toEqual(expected);
-    });
-  });
-
-  describe('fetchResidents', () => {
-    const mockUrls = [
-      'https://www.website.com/0',
-      'https://www.website.com/1',
-      'https://www.website.com/2',
-    ];
-    beforeEach(() => {
-      const mockResidents = { name: 'Luke Skywalker' };
-      window.fetch = jest.fn(() => {
-        return Promise.resolve({
-          json: () => Promise.resolve(mockResidents),
-          ok: true
-        });
-      });
-    });
-
-    it('should call fetch with the correct parameters', () => {
-      api.fetchResidents(mockUrls);
-      expect(window.fetch).toHaveBeenCalledWith(mockUrls[0]);
-      expect(window.fetch).toHaveBeenCalledWith(mockUrls[1]);
-      expect(window.fetch).toHaveBeenCalledWith(mockUrls[2]);
-    });
-
-    it('should return an object when called with an empty array', async () => {
-      const expected = { residents: ['unknown'] };
-      const result = await api.fetchResidents([]);
-      expect(result).toEqual(expected);
-    });
-    
-    it('should return an object when called with a filled array', async () => {
-      const expected = {
-        residents: ['Luke Skywalker', 'Luke Skywalker', 'Luke Skywalker']
-      }
-      const result = await api.fetchResidents(mockUrls);
-      expect(result).toEqual(expected);
-    });
-
-    it('should throw an error if response is not ok', () => {
-      window.fetch = jest.fn(() => {
-        return Promise.resolve({
-          ok: false,
-          status: 429
-        });
-      });
-      const expected = Error('429');
-      expect(api.fetchResidents(['some url'])).rejects.toEqual(expected);
-    });
-  });
-
-  describe('cleanData', () => {
-    it('should call cleanPeople if people is passed in', () => {
-      clean.cleanPeople = jest.fn();
-      api.cleanData('people', 'mockData');
-      expect(clean.cleanPeople).toHaveBeenCalled();
-    });
-    
-    it('should call cleanPlanets if planets is passed in', () => {
-      clean.cleanPlanets = jest.fn();
-      api.cleanData('planets', 'mockData');
-      expect(clean.cleanPlanets).toHaveBeenCalled();
-    });
-    
-    it('should call cleanVehicles if vehicles is passed in', () => {
-      clean.cleanVehicles = jest.fn();
-      api.cleanData('vehicles', 'mockData');
-      expect(clean.cleanVehicles).toHaveBeenCalled();
+      const expected = Error(`Error fetching data from ${mockUrl}. 404`);
+      expect(fetchData(mockUrl)).rejects.toEqual(expected);
     });
   });
 });

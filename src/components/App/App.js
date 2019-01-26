@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Controls } from '../Controls/Controls';
 import * as api from '../../utils/api';
+import * as clean from '../../utils/dataCleaner';
+import * as helper from '../../utils/apiHelper';
 
 class App extends Component {
   constructor() {
@@ -16,18 +18,39 @@ class App extends Component {
   }
 
   componentDidMount = async () => {
-    const openingCrawl = await api.fetchOpeningCrawl();
-    this.setState({ openingCrawl });
+    try {
+      const openingCrawl = await helper.getOpeningCrawl();
+      this.setState({ openingCrawl });
+    } catch (error) {
+      this.setState({ errorStatus: error.message });
+    }
   }
 
   setActiveCategory = async (categoryName) => {
-    let newState = {};
-    const length = this.state[categoryName].length;
-    if (categoryName !== 'favorites' && length === 0) {
-      const result = await api.fetchData(categoryName);
-      newState = await api.cleanData(categoryName, result);
+    try {
+      let newState = {};
+      const length = this.state[categoryName].length;
+      if (categoryName !== 'favorites' && length === 0) {
+        const data = await api.fetchData(`https://swapi.co/api/${categoryName}/`);
+        newState = await this.cleanData(categoryName, data.results);
+      }
+      this.setState({ ...newState, activeCategory: categoryName });
+    } catch (error) {
+      this.setState({ errorStatus: error.message });
     }
-    this.setState({ ...newState, activeCategory: categoryName });
+  }
+
+  cleanData = async (categoryName, uncleanData) => {
+    switch (categoryName) {
+      case 'people':
+        return clean.cleanPeople(uncleanData);
+      case 'planets':
+        return clean.cleanPlanets(uncleanData);
+      case 'vehicles':
+        return clean.cleanVehicles(uncleanData);
+      default:
+        break;
+    }
   }
 
   render() {
