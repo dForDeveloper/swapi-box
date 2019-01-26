@@ -16,12 +16,44 @@
     text-transform: uppercase;
     outline: none;
     font-size: 1.2rem;
+
+    &:hover {
+      cursor: pointer;
+      border: 3px solid yellow;
+      color: yellow;
+    }
   }
   
   .button--active {
     @extend .button;
-    // background-color: black;
     border: 3px solid yellow;
     color: yellow;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .Controls {
+    .button {
+      height: 40px;
+      min-width: 120px;
+      margin: 5px auto;
+      font-size: 1rem;
+    }
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .Controls {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    margin: 0 auto 10px;
+    width: 315px;
+
+    .button {
+      height: 40px;
+      min-width: 120px;
+      margin: 5px auto;
+      font-size: 1rem;
+    }
   }
 }

@@ -9,7 +9,10 @@ export const Card = ({ card, toggleFavorite }) => {
   const statLines = displayedStats.map(stat => {
     return stat === 'name' ?
       <h3 className="h3" key={stat}>{card.name}</h3> :
-      <p className="p--stat" key={stat}>{stat}: {card[stat]}</p>
+      <p className="p--stat" key={stat}>
+        <span className="span span--key">{stat}:</span>
+        <span className="span span--value">{card[stat]}</span>
+      </p>
   });
   const cardClass = favorite ? 'Card--fav' : 'Card'
   const buttonClass = favorite ? 'button--fav' : 'button'

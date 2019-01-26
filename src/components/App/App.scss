@@ -9,7 +9,7 @@
 .h1 {
   font-family: 'Starjhol';
   font-size: 5rem;
-  margin: 10px;
+  margin: 10px 0;
   text-align: center;
   color: yellow;
 }
@@ -17,7 +17,6 @@
 .section {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(3, 1fr);
   grid-column-gap: 1%;
   grid-row-gap: 10px;
   margin-bottom: 25px;
@@ -26,4 +25,43 @@
 .p--open {
   font-size: 3rem;
   color: yellow;
+}
+
+@media screen and (max-width: 1080px) {
+  .section {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .section {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .h1 {
+    margin: 5px 0;
+    font-size: 3.5rem;
+  }
+
+  .section {
+    grid-template-columns: 315px;
+    justify-content: space-around;
+  }
+}
+
+@media screen and (max-width: 385px) {
+  .App {
+    width: 100%;
+  }
+
+  .h1 {
+    margin: 12px 0 11px;
+    font-size: 2.8rem;
+  }
+
+  .section {
+    grid-template-columns: 300px;
+  }
 }
