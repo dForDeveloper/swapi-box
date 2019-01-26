@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Controls } from '../Controls/Controls';
+import { Card } from '../Card/Card';
 import * as api from '../../utils/api';
 import * as clean from '../../utils/dataCleaner';
 import * as helper from '../../utils/apiHelper';
@@ -53,6 +54,12 @@ class App extends Component {
     }
   }
 
+  getCards = (categoryName) => {
+    return this.state[categoryName].map(cardInfo => {
+      return <Card key={cardInfo.name} info={cardInfo} />
+    });
+  }
+
   render() {
     const { favorites, activeCategory, openingCrawl } = this.state;
     return (
@@ -62,7 +69,8 @@ class App extends Component {
           activeCategory={activeCategory}
           setActiveCategory={this.setActiveCategory}
         />
-        <p>{openingCrawl}</p>
+        {activeCategory === '' && <p>{openingCrawl}</p>}
+        {activeCategory !== '' && this.getCards(activeCategory)}
       </div>
     );
   }

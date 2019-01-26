@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 export const Controls = ({ favCount, activeCategory, setActiveCategory }) => {
   const buttonNames = ['people', 'planets', 'vehicles', 'favorites'];
