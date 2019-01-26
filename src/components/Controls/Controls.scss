@@ -1,3 +1,27 @@
-.button-active {
-  background-color: green;
+.Controls {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: space-around;
+  margin: 15px 0;
+
+  .button {
+    width: 50%;
+    min-width: 140px;
+    background-color: black;
+    border: 3px solid white;
+    color: white;
+    height: 50px;
+    border-radius: 25px;
+    margin: auto;
+    text-transform: uppercase;
+    outline: none;
+    font-size: 1.2rem;
+  }
+  
+  .button--active {
+    @extend .button;
+    // background-color: black;
+    border: 3px solid yellow;
+    color: yellow;
+  }
 }

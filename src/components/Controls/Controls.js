@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 export const Controls = ({ favCount, activeCategory, setActiveCategory }) => {
   const buttonNames = ['people', 'planets', 'vehicles', 'favorites'];
   const buttons = buttonNames.map(name => {
-    const buttonClass = name === activeCategory ? 'button-active' : '';
+    const buttonClass = name === activeCategory ? 'button--active' : 'button';
     const buttonText = name === 'favorites' ? `favorites ${favCount}` : name;
     return (
       <button
@@ -16,7 +16,7 @@ export const Controls = ({ favCount, activeCategory, setActiveCategory }) => {
       </button>
     );
   });
-  return <nav>{buttons}</nav>;
+  return <nav className="Controls">{buttons}</nav>;
 }
 
 Controls.propTypes = {

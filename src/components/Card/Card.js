@@ -8,13 +8,15 @@ export const Card = ({ card, toggleFavorite }) => {
   }); 
   const statLines = displayedStats.map(stat => {
     return stat === 'name' ?
-      <h3 key={stat}>{card.name}</h3> :
-      <p key={stat}>{stat}: {card[stat]}</p>
+      <h3 className="h3" key={stat}>{card.name}</h3> :
+      <p className="p--stat" key={stat}>{stat}: {card[stat]}</p>
   });
+  const cardClass = favorite ? 'Card--fav' : 'Card'
+  const buttonClass = favorite ? 'button--fav' : 'button'
   return (
-    <div>
+    <div className={cardClass}>
       {statLines}
-      <button onClick={() => toggleFavorite(card)}>
+      <button className={buttonClass} onClick={() => toggleFavorite(card)}>
         {favorite ? 'Remove from Favorites' : 'Add to Favorites'}
       </button>
     </div>

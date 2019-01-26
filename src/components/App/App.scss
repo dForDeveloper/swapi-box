@@ -1,0 +1,29 @@
+.App {
+  background-color: black;
+  color: white;
+  min-height: 100vh;
+  width: 90%;
+  margin: auto;
+}
+
+.h1 {
+  font-family: 'Starjhol';
+  font-size: 5rem;
+  margin: 10px;
+  text-align: center;
+  color: yellow;
+}
+
+.section {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-column-gap: 1%;
+  grid-row-gap: 10px;
+  margin-bottom: 25px;
+}
+
+.p--open {
+  font-size: 3rem;
+  color: yellow;
+}

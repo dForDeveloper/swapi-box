@@ -94,13 +94,19 @@ class App extends Component {
     const { favorites, activeCategory, openingCrawl } = this.state;
     return (
       <div className="App">
+        <h1 className="h1">Swapi Box</h1>
         <Controls
           favCount={favorites.length}
           activeCategory={activeCategory}
           setActiveCategory={this.setActiveCategory}
         />
-        {activeCategory === '' && <p>{openingCrawl}</p>}
-        {activeCategory !== '' && this.getCards(activeCategory)}
+        {activeCategory === '' && <p className="p--open">{openingCrawl}</p>}
+        {
+          activeCategory !== '' && 
+            <section className='section'>
+              {this.getCards(activeCategory)}
+            </section>
+        }
       </div>
     );
   }

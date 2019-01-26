@@ -19,7 +19,7 @@ const getPopulationAbbreviation = (population) => {
 export const cleanPeople = async (people) => {
   const cleanedPeople = await Promise.all(
     people.map(async person => {
-      const { name } = person;
+      const { name, birth_year } = person;
       const { homeworld, population } = (
         await helper.getHomeworld(person.homeworld)
       );
@@ -32,7 +32,8 @@ export const cleanPeople = async (people) => {
         category: 'people',
         Homeworld: homeworld,
         [populationKey]: populationAbbrev,
-        Species: species
+        Species: species,
+        'Year of birth': birth_year
       };
     })
   );
@@ -71,14 +72,15 @@ export const cleanPlanets = async (planets) => {
 
 export const cleanVehicles = (vehicles) => {
   const cleanedVehicles = vehicles.map(vehicle => {
-    const { name, model, vehicle_class, passengers } = vehicle;
+    const { name, model, vehicle_class, passengers, cost_in_credits } = vehicle
     return {
       name,
       favorite: false,
       category: 'vehicles',
       Model: model,
       Class: vehicle_class,
-      'Passenger Capacity': passengers
+      'Passenger Capacity': passengers,
+      Cost: cost_in_credits
     };
   });
   return { vehicles: cleanedVehicles };

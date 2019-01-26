@@ -1,13 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Card should match the snapshot 1`] = `
-<div>
+<div
+  className="Card"
+>
   <h3
+    className="h3"
     key="name"
   >
     Luke Skywalker
   </h3>
   <p
+    className="p--stat"
     key="Species"
   >
     Species
@@ -15,6 +19,7 @@ exports[`Card should match the snapshot 1`] = `
     Human
   </p>
   <p
+    className="p--stat"
     key="Homeworld"
   >
     Homeworld
@@ -22,6 +27,7 @@ exports[`Card should match the snapshot 1`] = `
     some planet
   </p>
   <p
+    className="p--stat"
     key="Population of some planet"
   >
     Population of some planet
@@ -29,6 +35,7 @@ exports[`Card should match the snapshot 1`] = `
     5 thousand
   </p>
   <button
+    className="button"
     onClick={[Function]}
   >
     Add to Favorites
