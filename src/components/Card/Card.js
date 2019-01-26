@@ -2,17 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export const Card = ({ info }) => {
-  const statLines = Object.keys(info).filter(key => {
-    return (key !== 'name' && key !== 'category')
-  }).map(stat => {
+  const statLines = Object.keys(info).map(stat => {
+    if (stat === 'name') {
+      return <h3 key={stat}>{info.name}</h3>
+    }
     return <p key={stat}>{stat}: {info[stat]}</p>
   });
-  return (
-    <div>
-      <h3>{info.name}</h3>
-      {statLines}
-    </div>
-  )
+  return <div>{statLines}</div>
 }
 
 Card.propTypes = {

@@ -18,7 +18,7 @@ describe('dataCleaner', () => {
     helper.getHomeworld = jest.fn(() => {
       return ({
         homeworld: 'some planet',
-        population: 'a lot'
+        population: '5000'
       });
     });
     helper.getSpecies = jest.fn(() => {
@@ -42,17 +42,15 @@ describe('dataCleaner', () => {
         people: [
           {
             name: 'Luke Skywalker',
-            species: 'Human',
-            homeworld: 'some planet',
-            population: 'a lot',
-            category: 'people'
+            Species: 'Human',
+            Homeworld: 'some planet',
+            'Population of some planet': '5 thousand'
           },
           {
             name: 'Han Solo',
-            species: 'Human',
-            homeworld: 'some planet',
-            population: 'a lot',
-            category: 'people'
+            Species: 'Human',
+            Homeworld: 'some planet',
+            'Population of some planet': '5 thousand'
           }
         ]
       };
@@ -97,19 +95,17 @@ describe('dataCleaner', () => {
         planets: [
           {
             name: 'Tatooine',
-            terrain: 'desert',
-            climate: 'arid',
-            population: '200000',
-            residents: ['some person', 'some other person'],
-            category: 'planets'
+            Terrain: 'desert',
+            Climate: 'arid',
+            Population: '200 thousand',
+            Residents: 'some person and some other person'
           },
           {
             name: 'Alderaan',
-            terrain: 'grasslands, mountains',
-            climate: 'temperate',
-            population: '2000000000',
-            residents: ['some person', 'some other person'],
-            category: 'planets'
+            Terrain: 'grasslands, mountains',
+            Climate: 'temperate',
+            Population: '2 billion',
+            Residents: 'some person and some other person'
           }
         ]
       };
@@ -133,10 +129,9 @@ describe('dataCleaner', () => {
         vehicles: [
           {
             name: 'AT-AT', 
-            model: 'All Terrain Armored Transport', 
-            passengers: '40', 
-            vehicle_class: 'assault walker',
-            category: 'vehicles'
+            Model: 'All Terrain Armored Transport', 
+            'Passenger Capacity': '40', 
+            Class: 'assault walker'
           }
         ]
       };
