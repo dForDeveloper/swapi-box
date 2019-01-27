@@ -93,11 +93,12 @@ class App extends Component {
   getPageButtons = (categoryName) => {
     const { currentPage, pageData } = this.state;
     if (currentPage === 1 &&
-      categoryName !== 'favorites' ||
-      this.state.favorites.length > 10) {
+      (categoryName !== 'favorites' ||
+      this.state.favorites.length > 10)) {
         return (
-          <div>
+          <div className="section--div-button">
             <button
+              className="button-next"
               onClick={() => this.getNextPage(categoryName, currentPage)}
             >
               Next
@@ -106,13 +107,15 @@ class App extends Component {
         );
     } else if (currentPage < pageData[categoryName]) {
       return (
-        <div>
+        <div className="section--div-button">
           <button
+            className="button-previous"
             onClick={() => this.setState({ currentPage: currentPage - 1 })}
           >
             Previous
           </button>
           <button
+            className="button-next"
             onClick={() => this.getNextPage(categoryName, currentPage)}
           >
             Next
@@ -121,8 +124,9 @@ class App extends Component {
       );
     } else if (currentPage > 1 && currentPage === pageData[categoryName]) {
       return (
-        <div>
+        <div className="section--div-button">
           <button
+            className="button-previous"
             onClick={() => this.setState({ currentPage: currentPage - 1 })}
           >
             Previous
