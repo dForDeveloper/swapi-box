@@ -38,16 +38,12 @@ class App extends Component {
         const data = await api.fetchData(
           `https://swapi.co/api/${categoryName}/`
         );
-        const pageCount = Math.ceil(data.count / 10);
-        await this.setState({
-          pageData: { ...pageData, [categoryName]: pageCount }
-        });
         newState = await this.cleanData(categoryName, data.results);
+        const pageCount = Math.ceil(data.count / 10);
+        newState.pageData = { ...pageData, [categoryName]: pageCount };
       } else if (categoryName === 'favorites') {
         const pageCount = Math.ceil(this.state.favorites.length / 10);
-        await this.setState({
-          pageData: { ...pageData, [categoryName]: pageCount }
-        });
+        newState.pageData = { ...pageData, [categoryName]: pageCount };
       }
       this.setState({
         ...newState,
@@ -134,6 +130,7 @@ class App extends Component {
         </div>
       );
     }
+    return <div className="section--div-button"></div>
   }
 
   getNextPage = async (categoryName, currentPage) => {

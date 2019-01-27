@@ -55,8 +55,14 @@ describe('App', () => {
   });
 
   describe('setActiveCategory', () => {
-    it('should set state with the category name passed in', async () => {
-      await wrapper.instance().setActiveCategory('favorites');
+    const mockFetchedData = {
+      count: 11,
+      results: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+    };
+    api.fetchData = jest.fn(() => mockFetchedData);
+
+    it('should set state with the category name passed in', () => {
+      wrapper.instance().setActiveCategory('favorites');
       expect(wrapper.state('activeCategory')).toEqual('favorites');
     });
     
@@ -67,6 +73,7 @@ describe('App', () => {
       });
       await wrapper.instance().setActiveCategory('people');
       expect(wrapper.state('people')).toEqual(mockPeople);
+      expect(wrapper.state('pageData')).toEqual({ people: 2 });
     });
 
     it('should set state with an error if an error is caught', () => {
@@ -75,6 +82,11 @@ describe('App', () => {
       });
       wrapper.instance().setActiveCategory('people');
       expect(wrapper.state('errorStatus')).toEqual('Cannot fetch');
+    });
+
+    it('should set state with the current page number', () => {
+      wrapper.instance().setActiveCategory('favorites');
+      expect(wrapper.state('currentPage')).toEqual(1);
     });
   });
 
@@ -137,6 +149,48 @@ describe('App', () => {
       wrapper.instance().updateFavorites(mockFavorite);
       wrapper.instance().updateFavorites(mockPerson1);
       expect(wrapper.state('favorites').length).toEqual(0);
+    });
+  });
+
+  describe('getNextPage', () => {
+    beforeEach(() => {
+      api.fetchData = jest.fn(() => {
+        return { results: 'some data' };
+      });
+    })
+    
+    it('should increment the current page in state', () => {
+      expect(wrapper.state('currentPage')).toEqual(0);
+      wrapper.instance().getNextPage('favorites', 0);
+      expect(wrapper.state('currentPage')).toEqual(1);
+    });
+    
+    it('should call fetchData with the correct parameter', () => {
+      wrapper.instance().getNextPage('people', 1);
+      expect(api.fetchData).toHaveBeenCalledWith(
+        `https://swapi.co/api/people/?page=2`
+      );
+    });
+      
+    it('should add to the array in state', async () => {
+      wrapper.instance().cleanData = jest.fn(() => {
+        return { people: [11, 12, 13] };
+      });
+      const expected = [1, 2, 3, 4, 5, 6 ,7 ,8, 9, 10, 11, 12, 13];
+      wrapper.setState({
+        people: [1, 2, 3, 4, 5, 6 ,7 ,8, 9, 10],
+        currentPage: 1
+      });
+      await wrapper.instance().getNextPage('people', 1);
+      expect(wrapper.state('people')).toEqual(expected);
+    });
+    
+    it('should set state if an error is caught', async () => {
+      wrapper.instance().cleanData = jest.fn(() => {
+        throw Error('error cleaning data');
+      });
+      await wrapper.instance().getNextPage('people', 1);
+      expect(wrapper.state('errorStatus')).toEqual('error cleaning data');
     });
   });
 });
