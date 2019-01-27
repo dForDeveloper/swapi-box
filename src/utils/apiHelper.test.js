@@ -3,12 +3,14 @@ import * as api from './api';
 
 
 describe('apiHelper', () => {
-  describe('getOpeningCrawl', () => {
+  describe('getFilm', () => {
     beforeEach(() => {
       const mockData = {
         count: 1,
         results: [{
-          opening_crawl: 'A long time ago in a galaxy far, far away...'
+          title: 'Star Wars',
+          opening_crawl: 'A long time ago in a galaxy far, far away...',
+          release_date: '1977'
         }]
       };
       api.fetchData = jest.fn(() => Promise.resolve(mockData));
@@ -16,13 +18,17 @@ describe('apiHelper', () => {
   
     it('should call fetchData with the correct parameter', async () => {
       const expected = 'https://swapi.co/api/films/';
-      await helper.getOpeningCrawl();
+      await helper.getFilm();
       expect(api.fetchData).toHaveBeenCalledWith(expected);
     });
   
-    it('should return a string', async () => {
-      const expected = 'A long time ago in a galaxy far, far away...';
-      const result = await helper.getOpeningCrawl();
+    it('should return a film object', async () => {
+      const expected = {
+        title: 'Star Wars',
+        opening_crawl: 'A long time ago in a galaxy far, far away...',
+        release_date: '1977'
+      };
+      const result = await helper.getFilm();
       expect(result).toEqual(expected);
     });
   });

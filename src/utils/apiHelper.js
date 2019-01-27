@@ -1,9 +1,10 @@
 import { fetchData } from './api';
 
-export const getOpeningCrawl = async () => {
+export const getFilm = async () => {
   const films = await fetchData('https://swapi.co/api/films/');
   const randomNum = Math.floor(Math.random() * films.count);
-  return films.results[randomNum].opening_crawl;
+  const { title, opening_crawl, release_date } = films.results[randomNum];
+  return { title, opening_crawl, release_date };
 }
 
 export const getHomeworld = async (url) => {

@@ -7,12 +7,14 @@ describe('dataCleaner', () => {
       {
         name: 'Luke Skywalker',
         homeworld: 'planetUrl1',
-        species: 'speciesUrl1'
+        species: 'speciesUrl1',
+        birth_year: '19BBY',
       },
       {
         name: 'Han Solo',
         homeworld: 'planetUrl2',
-        species: 'speciesUrl2'
+        species: 'speciesUrl2',
+        birth_year: '29BBY',
       }
     ];
     helper.getHomeworld = jest.fn(() => {
@@ -45,6 +47,7 @@ describe('dataCleaner', () => {
             Species: 'Human',
             Homeworld: 'some planet',
             'Population of some planet': '5 thousand',
+            'Year of birth': '19BBY',
             favorite: false,
             category: 'people'
           },
@@ -53,6 +56,7 @@ describe('dataCleaner', () => {
             Species: 'Human',
             Homeworld: 'some planet',
             'Population of some planet': '5 thousand',
+            'Year of birth': '29BBY',
             favorite: false,
             category: 'people'
           }
@@ -130,6 +134,7 @@ describe('dataCleaner', () => {
           model: 'All Terrain Armored Transport', 
           passengers: '40', 
           vehicle_class: 'assault walker',
+          cost_in_credits: '123456',
           extraKey: 'extra value'
         }
       ];
@@ -140,6 +145,7 @@ describe('dataCleaner', () => {
             Model: 'All Terrain Armored Transport', 
             'Passenger Capacity': '40', 
             Class: 'assault walker',
+            Cost: '123456',
             favorite: false,
             category: 'vehicles'
           }
