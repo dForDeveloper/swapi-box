@@ -29,16 +29,18 @@ describe('App', () => {
 
   describe('componentDidMount', () => {
     it('should set state with an opening crawl', async () => {
-      const expected = 'A long time ago in a galaxy far, far away...';
-      helper.getOpeningCrawl = jest.fn(() => {
-        return 'A long time ago in a galaxy far, far away...';
-      });
+      const mockFilm = {
+        title: 'Star Wars',
+        opening_crawl: 'A long time ago in a galaxy far, far away...',
+        release_date: '1977'
+      };
+      helper.getFilm = jest.fn(() => mockFilm);
       await wrapper.instance().componentDidMount();
-      expect(wrapper.state('openingCrawl')).toEqual(expected);
+      expect(wrapper.state('film')).toEqual(mockFilm);
     });
 
     it('should set state with an error if an error is caught', () => {
-      helper.getOpeningCrawl = jest.fn(() => {
+      helper.getFilm = jest.fn(() => {
         throw Error('sorry');
       });
       wrapper.instance().componentDidMount();

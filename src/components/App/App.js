@@ -9,8 +9,8 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      openingCrawl: '',
       activeCategory: '',
+      film: {},
       people: [],
       planets: [],
       vehicles: [],
@@ -20,8 +20,8 @@ class App extends Component {
 
   componentDidMount = async () => {
     try {
-      const openingCrawl = await helper.getOpeningCrawl();
-      this.setState({ openingCrawl });
+      const film = await helper.getFilm();
+      this.setState({ film });
     } catch (error) {
       this.setState({ errorStatus: error.message });
     }
@@ -91,7 +91,8 @@ class App extends Component {
   }
 
   render() {
-    const { favorites, activeCategory, openingCrawl } = this.state;
+    const { favorites, activeCategory, film } = this.state;
+    const { title, opening_crawl, release_date } = film;
     return (
       <div className="App">
         <h1 className="h1">Swapi Box</h1>
@@ -100,7 +101,14 @@ class App extends Component {
           activeCategory={activeCategory}
           setActiveCategory={this.setActiveCategory}
         />
-        {activeCategory === '' && <p className="p--open">{openingCrawl}</p>}
+        {
+          activeCategory === '' &&
+            <div className="div--open">
+              <h3 className="h3--title">{title}</h3>
+              <p className="p--opening-crawl">{opening_crawl}</p>
+              <p className="p--release-date">{release_date}</p>
+            </div>
+        }
         {
           activeCategory !== '' && 
             <section className='section'>
