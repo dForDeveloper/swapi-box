@@ -9,6 +9,7 @@ describe('Card', () => {
     Species: 'Human',
     Homeworld: 'some planet',
     'Population of some planet': '5 thousand',
+    'Year of birth': '19BBY',
     favorite: false,
     category: 'people'
   };

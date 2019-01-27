@@ -14,25 +14,65 @@ exports[`Card should match the snapshot 1`] = `
     className="p--stat"
     key="Species"
   >
-    Species
-    : 
-    Human
+    <span
+      className="span span--key"
+    >
+      Species
+      :
+    </span>
+    <span
+      className="span span--value"
+    >
+      Human
+    </span>
   </p>
   <p
     className="p--stat"
     key="Homeworld"
   >
-    Homeworld
-    : 
-    some planet
+    <span
+      className="span span--key"
+    >
+      Homeworld
+      :
+    </span>
+    <span
+      className="span span--value"
+    >
+      some planet
+    </span>
   </p>
   <p
     className="p--stat"
     key="Population of some planet"
   >
-    Population of some planet
-    : 
-    5 thousand
+    <span
+      className="span span--key"
+    >
+      Population of some planet
+      :
+    </span>
+    <span
+      className="span span--value"
+    >
+      5 thousand
+    </span>
+  </p>
+  <p
+    className="p--stat"
+    key="Year of birth"
+  >
+    <span
+      className="span span--key"
+    >
+      Year of birth
+      :
+    </span>
+    <span
+      className="span span--value"
+    >
+      19BBY
+    </span>
   </p>
   <button
     className="button"
