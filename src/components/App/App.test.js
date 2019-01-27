@@ -55,8 +55,8 @@ describe('App', () => {
   });
 
   describe('setActiveCategory', () => {
-    it('should set state with the category name passed in', () => {
-      wrapper.instance().setActiveCategory('favorites');
+    it('should set state with the category name passed in', async () => {
+      await wrapper.instance().setActiveCategory('favorites');
       expect(wrapper.state('activeCategory')).toEqual('favorites');
     });
     
@@ -100,7 +100,10 @@ describe('App', () => {
 
   describe('getCards', () => {
     it('should return an array of JSX', () => {
-      wrapper.setState({ people: [mockPerson1, mockPerson2] });
+      wrapper.setState({
+        people: [mockPerson1, mockPerson2],
+        currentPage: 1
+      });
       const result = wrapper.instance().getCards('people');
       expect(result.length).toEqual(2);
     })

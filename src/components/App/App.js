@@ -14,7 +14,9 @@ class App extends Component {
       people: [],
       planets: [],
       vehicles: [],
-      favorites: []
+      favorites: [],
+      currentPage: 0,
+      pageData: {}
     };
   }
 
@@ -29,13 +31,29 @@ class App extends Component {
 
   setActiveCategory = async (categoryName) => {
     try {
+      const { pageData } = this.state;
       let newState = {};
       const length = this.state[categoryName].length;
       if (categoryName !== 'favorites' && length === 0) {
-        const data = await api.fetchData(`https://swapi.co/api/${categoryName}/`);
+        const data = await api.fetchData(
+          `https://swapi.co/api/${categoryName}/`
+        );
+        const pageCount = Math.ceil(data.count / 10);
+        await this.setState({
+          pageData: { ...pageData, [categoryName]: pageCount }
+        });
         newState = await this.cleanData(categoryName, data.results);
+      } else if (categoryName === 'favorites') {
+        const pageCount = Math.ceil(this.state.favorites.length / 10);
+        await this.setState({
+          pageData: { ...pageData, [categoryName]: pageCount }
+        });
       }
-      this.setState({ ...newState, activeCategory: categoryName });
+      this.setState({
+        ...newState,
+        activeCategory: categoryName,
+        currentPage: 1
+      });
     } catch (error) {
       this.setState({ errorStatus: error.message });
     }
@@ -58,7 +76,10 @@ class App extends Component {
     if (this.state[categoryName].length === 0) {
       return <p className="h3--no-fav">nothing to display</p>
     }
-    return this.state[categoryName].map(cardInfo => {
+    const { currentPage } = this.state;
+    return this.state[categoryName].filter((cardInfo, index) => {
+      return index < currentPage * 10 && index >= (currentPage - 1) * 10;
+    }).map(cardInfo => {
       return (
         <Card
           key={cardInfo.name}
@@ -67,6 +88,71 @@ class App extends Component {
         />
       );
     });
+  }
+
+  getPageButtons = (categoryName) => {
+    const { currentPage, pageData } = this.state;
+    if (currentPage === 1 &&
+      categoryName !== 'favorites' ||
+      this.state.favorites.length > 10) {
+        return (
+          <div>
+            <button
+              onClick={() => this.getNextPage(categoryName, currentPage)}
+            >
+              Next
+            </button>
+          </div>
+        );
+    } else if (currentPage < pageData[categoryName]) {
+      return (
+        <div>
+          <button
+            onClick={() => this.setState({ currentPage: currentPage - 1 })}
+          >
+            Previous
+          </button>
+          <button
+            onClick={() => this.getNextPage(categoryName, currentPage)}
+          >
+            Next
+          </button>
+        </div>
+      );
+    } else if (currentPage > 1 && currentPage === pageData[categoryName]) {
+      return (
+        <div>
+          <button
+            onClick={() => this.setState({ currentPage: currentPage - 1 })}
+          >
+            Previous
+          </button>
+        </div>
+      );
+    }
+  }
+
+  getNextPage = async (categoryName, currentPage) => {
+    const length = this.state[categoryName].length;
+    if (categoryName !== 'favorites' && !(length > currentPage * 10)) {
+      try {
+        const data = await api.fetchData(
+          `https://swapi.co/api/${categoryName}/?page=${currentPage + 1}`
+        );
+        const newState = await this.cleanData(categoryName, data.results);
+        this.setState({
+          currentPage: currentPage + 1,
+          [categoryName]: [
+            ...this.state[categoryName],
+            ...newState[categoryName]
+          ]
+        });
+      } catch (error) {
+        this.setState({ errorStatus: error.message });
+      }
+    } else {
+      this.setState({ currentPage: currentPage + 1 });
+    }
   }
 
   toggleFavorite = async (card) => {
@@ -121,6 +207,7 @@ class App extends Component {
           activeCategory !== '' && 
             <section className='section'>
               {this.getCards(activeCategory)}
+              {this.getPageButtons(activeCategory)}
             </section>
         }
       </div>
