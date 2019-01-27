@@ -55,6 +55,9 @@ class App extends Component {
   }
 
   getCards = (categoryName) => {
+    if (this.state[categoryName].length === 0) {
+      return <p className="h3--no-fav">nothing to display</p>
+    }
     return this.state[categoryName].map(cardInfo => {
       return (
         <Card
@@ -95,7 +98,12 @@ class App extends Component {
     const { title, opening_crawl, release_date } = film;
     return (
       <div className="App">
-        <h1 className="h1">Swapi Box</h1>
+        <h1
+          className="h1"
+          onClick={() => this.setState({ activeCategory: '' })}
+        >
+          swapi box
+        </h1>
         <Controls
           favCount={favorites.length}
           activeCategory={activeCategory}

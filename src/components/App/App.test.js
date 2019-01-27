@@ -27,6 +27,12 @@ describe('App', () => {
     wrapper = shallow(<App />);
   });
 
+  it('should set state when the header is clicked', () => {
+    wrapper.setState({ activeCategory: 'people' });
+    wrapper.find('.h1').simulate('click');
+    expect(wrapper.state('activeCategory')).toEqual('');
+  });
+
   describe('componentDidMount', () => {
     it('should set state with an opening crawl', async () => {
       const mockFilm = {
