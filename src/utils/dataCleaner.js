@@ -1,6 +1,6 @@
 import * as helper from './apiHelper';
 
-const getPopulationAbbreviation = (population) => {
+export const getPopulationAbbreviation = (population) => {
   const populationLog1000 = Math.floor(Math.log10(parseInt(population)) / 3);
   switch (populationLog1000) {
     case 1:

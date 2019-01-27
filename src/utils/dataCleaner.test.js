@@ -155,4 +155,31 @@ describe('dataCleaner', () => {
       expect(result).toEqual(expected);
     });
   });
+
+  describe('getPopulationAbbreviation', () => {
+    it('returns the correct string for 1000-999999', () => {
+      const result = clean.getPopulationAbbreviation('123456');
+      expect(result).toEqual('123 thousand');
+    });
+    
+    it('returns the correct string for 1000000-999999999', () => {
+      const result = clean.getPopulationAbbreviation('1234567');
+      expect(result).toEqual('1 million');
+    });
+    
+    it('returns the correct string for 1000000000-999999999999', () => {
+      const result = clean.getPopulationAbbreviation('9000000000');
+      expect(result).toEqual('9 billion');
+    });
+    
+    it('returns the correct string for 1000000000000-999999999999999', () => {
+      const result = clean.getPopulationAbbreviation('33000000000000');
+      expect(result).toEqual('33 trillion');
+    });
+    
+    it('returns the correct string for unknown', () => {
+      const result = clean.getPopulationAbbreviation('unknown');
+      expect(result).toEqual('unknown');
+    });
+  });
 });
