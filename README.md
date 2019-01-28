@@ -24,14 +24,16 @@
   - Make pull requests from your fork to the original repo
 
 ## Preview of the App
-![]()
-![]()
+![Home screen](https://user-images.githubusercontent.com/41239540/51814291-e7632d80-2277-11e9-969c-ef605ffd4bb9.png)
+![People screen - page 2](https://user-images.githubusercontent.com/41239540/51814323-0a8ddd00-2278-11e9-98fd-a0a75a98d12c.png)
+![Mobile screen](https://user-images.githubusercontent.com/41239540/51814335-2db88c80-2278-11e9-973c-51532cdac125.png)
+
 
 ## Technologies Used:
   - React
-  - Sass
   - Jest
   - Enzyme
+  - Sass
 
 ## Contributors:
 - Jeo D [@dForDeveloper](https://github.com/dForDeveloper)
