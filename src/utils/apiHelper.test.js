@@ -1,7 +1,6 @@
 import * as helper from './apiHelper';
 import * as api from './api';
 
-
 describe('apiHelper', () => {
   describe('getFilm', () => {
     beforeEach(() => {
@@ -106,6 +105,34 @@ describe('apiHelper', () => {
         residents: ['Luke Skywalker', 'Luke Skywalker', 'Luke Skywalker']
       }
       const result = await helper.getResidents(mockUrls);
+      expect(result).toEqual(expected);
+    });
+  });
+
+  const mockPlanet = {
+    name: 'Tatooine',
+    Terrain: 'desert',
+    Climate: 'arid',
+    Population: '200 thousand',
+    Residents: 'some person and some other person',
+    favorite: false,
+    category: 'planets'
+  };
+  
+  describe('setLocalStorage', () => {
+    it('should set local storage with the correct key value pair', () => {
+      helper.setLocalStorage({ planets: [mockPlanet] });
+      expect(localStorage.setItem)
+        .toHaveBeenLastCalledWith(['planets'], JSON.stringify([mockPlanet]));
+      expect(localStorage.__STORE__['planets'])
+        .toEqual(JSON.stringify([mockPlanet]));
+    });
+  });
+
+  describe('getLocalStorage', () => {
+    it('should return an object in the correct format', () => {
+      const expected = { planets: [mockPlanet] };
+      const result = helper.getLocalStorage();
       expect(result).toEqual(expected);
     });
   });

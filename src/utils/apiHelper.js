@@ -35,3 +35,20 @@ export const getResidents = async (urls) => {
   }
   return { residents: ['unknown'] }
 }
+
+export const getLocalStorage = () => {
+  const keys = ['people', 'planets', 'vehicles', 'favorites', 'pageData'];
+  const storedState = keys.reduce((newState, key) => {
+    if (localStorage.getItem(key)) {
+      newState[key] = JSON.parse(localStorage.getItem(key));
+    }
+    return newState;
+  }, {});
+  return storedState;
+}
+
+export const setLocalStorage = (newState) => {
+  Object.keys(newState).forEach(key => {
+    localStorage.setItem([key], JSON.stringify(newState[key]));
+  })
+}
