@@ -45,21 +45,31 @@ describe('App', () => {
       expect(wrapper.state('film')).toEqual(mockFilm);
     });
 
+    it('should set state with data if localStorage has data', async () => {
+      helper.getLocalStorage = jest.fn(() => {
+        return { people: [{ name: 'Darth Vader' }] }
+      });
+      await wrapper.instance().componentDidMount();
+      expect(wrapper.state('people')).toEqual([{ name: 'Darth Vader' }]);
+    });
+
     it('should set state with an error if an error is caught', () => {
       helper.getFilm = jest.fn(() => {
-        throw Error('sorry');
+        throw Error('Cannot fetch film');
       });
       wrapper.instance().componentDidMount();
-      expect(wrapper.state('errorStatus')).toEqual('sorry');
+      expect(wrapper.state('errorStatus')).toEqual('Cannot fetch film');
     });
   });
 
   describe('setActiveCategory', () => {
+    const mockPeople = [{ name: 'Luke Skywalker' }];
     const mockFetchedData = {
       count: 11,
       results: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
     };
     api.fetchData = jest.fn(() => mockFetchedData);
+    helper.setLocalStorage = jest.fn();
 
     it('should set state with the category name passed in', () => {
       wrapper.instance().setActiveCategory('favorites');
@@ -67,7 +77,6 @@ describe('App', () => {
     });
     
     it('should set state with an array if nothing is in state', async () => {
-      const mockPeople = [{ name: 'Luke Skywalker' }];
       wrapper.instance().cleanData = jest.fn(() => {
         return { people: mockPeople };
       });
@@ -76,12 +85,18 @@ describe('App', () => {
       expect(wrapper.state('pageData')).toEqual({ people: 2 });
     });
 
+    it('should call setLocalStorage with the correct parameter', () => {
+      const expected = { pageData: { people: 2 }, people: mockPeople };
+      wrapper.instance().setActiveCategory('people');
+      expect(helper.setLocalStorage).toHaveBeenCalledWith(expected)
+    });
+
     it('should set state with an error if an error is caught', () => {
       api.fetchData = jest.fn(() => {
-        throw Error('Cannot fetch');
+        throw Error('Cannot fetch data');
       });
       wrapper.instance().setActiveCategory('people');
-      expect(wrapper.state('errorStatus')).toEqual('Cannot fetch');
+      expect(wrapper.state('errorStatus')).toEqual('Cannot fetch data');
     });
 
     it('should set state with the current page number', () => {
@@ -135,6 +150,12 @@ describe('App', () => {
       await wrapper.instance().toggleFavorite(mockPerson1);
       expect(wrapper.instance().updateFavorites).toHaveBeenCalledWith(expected)
     });
+
+    it('should call setLocalStorage with the correct parameter', async () => {
+      const expected = { favorites: [{ ...mockPerson1, favorite: true }] };
+      await wrapper.instance().toggleFavorite(mockPerson1);
+      expect(helper.setLocalStorage).toHaveBeenCalledWith(expected)
+    });
   });
 
   describe('updateFavorites', () => {
@@ -150,12 +171,21 @@ describe('App', () => {
       wrapper.instance().updateFavorites(mockPerson1);
       expect(wrapper.state('favorites').length).toEqual(0);
     });
+
+    it('should call setLocalStorage with the correct parameter', async () => {
+      const expected = { favorites: [mockPerson2] };
+      await wrapper.instance().updateFavorites(mockPerson2);
+      expect(helper.setLocalStorage).lastCalledWith(expected)
+    });
   });
 
   describe('getNextPage', () => {
     beforeEach(() => {
       api.fetchData = jest.fn(() => {
         return { results: 'some data' };
+      });
+      wrapper.instance().cleanData = jest.fn(() => {
+        return { people: [11, 12, 13] };
       });
     })
     
@@ -173,9 +203,6 @@ describe('App', () => {
     });
       
     it('should add to the array in state', async () => {
-      wrapper.instance().cleanData = jest.fn(() => {
-        return { people: [11, 12, 13] };
-      });
       const expected = [1, 2, 3, 4, 5, 6 ,7 ,8, 9, 10, 11, 12, 13];
       wrapper.setState({
         people: [1, 2, 3, 4, 5, 6 ,7 ,8, 9, 10],
@@ -191,6 +218,16 @@ describe('App', () => {
       });
       await wrapper.instance().getNextPage('people', 1);
       expect(wrapper.state('errorStatus')).toEqual('error cleaning data');
+    });
+
+    it('should call setLocalStorage with the correct parameter', async () => {
+      const expected = { people: [1, 2, 3, 4, 5, 6 ,7 ,8, 9, 10, 11, 12, 13] };
+      wrapper.setState({
+        people: [1, 2, 3, 4, 5, 6 ,7 ,8, 9, 10],
+        currentPage: 1
+      });
+      await wrapper.instance().getNextPage('people', 1);
+      expect(helper.setLocalStorage).toHaveBeenLastCalledWith(expected)
     });
   });
 });

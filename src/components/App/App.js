@@ -23,7 +23,8 @@ class App extends Component {
   componentDidMount = async () => {
     try {
       const film = await helper.getFilm();
-      this.setState({ film });
+      const storedState = helper.getLocalStorage();
+      this.setState({ film, ...storedState });
     } catch (error) {
       this.setState({ errorStatus: error.message });
     }
@@ -41,6 +42,7 @@ class App extends Component {
         newState = await this.cleanData(categoryName, data.results);
         const pageCount = Math.ceil(data.count / 10);
         newState.pageData = { ...pageData, [categoryName]: pageCount };
+        helper.setLocalStorage(newState);
       } else if (categoryName === 'favorites') {
         const pageCount = Math.ceil(this.state.favorites.length / 10);
         newState.pageData = { ...pageData, [categoryName]: pageCount };
@@ -141,12 +143,11 @@ class App extends Component {
           `https://swapi.co/api/${categoryName}/?page=${currentPage + 1}`
         );
         const newState = await this.cleanData(categoryName, data.results);
+        newState[categoryName].unshift(...this.state[categoryName]);
+        helper.setLocalStorage(newState);
         this.setState({
-          currentPage: currentPage + 1,
-          [categoryName]: [
-            ...this.state[categoryName],
-            ...newState[categoryName]
-          ]
+          ...newState,
+          currentPage: currentPage + 1
         });
       } catch (error) {
         this.setState({ errorStatus: error.message });
@@ -165,17 +166,20 @@ class App extends Component {
       return categoryItem;
     });
     await this.setState({ [category]: newArray });
+    helper.setLocalStorage({ [category]: newArray });
     this.updateFavorites({ ...card, favorite: !favorite });
   }
 
   updateFavorites = (card) => {
     const { favorites } = this.state;
     if (card.favorite) {
+      helper.setLocalStorage({ favorites: [...favorites, card] });
       this.setState({ favorites: [...favorites, card] });
     } else {
       const newFavorites = favorites.filter((favoritedCard) => {
         return favoritedCard.name !== card.name;
       });
+      helper.setLocalStorage({ favorites: newFavorites });
       this.setState({ favorites: newFavorites });
     }
   }
